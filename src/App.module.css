@@ -1,0 +1,131 @@
+.app {
+	/*margin-top: 10px;*/
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.container {
+	margin-top: 50px;
+	display: flex;
+	flex-direction: column;
+	width: 500px;
+	min-height: 700px;
+	background: #1e1e1e;
+	color: #ffffff;
+	align-items: center;
+	position: relative;
+}
+
+.header {
+	position: static;
+	width: 100%;
+	height: 100px;
+	color: #ffffff;
+	text-align: center;
+	z-index: 999;
+}
+
+.taskList {
+	width: 100%;
+	margin-bottom: 100px;
+}
+
+.task {
+	margin: 10px auto;
+	width: 90%;
+	height: 100px;
+	background: #263238;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-left: 10px solid #fed36a;
+}
+
+.footer {
+	display: flex;
+	background: #263238;
+	width: 100%;
+	height: 100px;
+	position: absolute;
+	bottom: 0;
+}
+
+.input {
+	background: #455a64;
+	border: none;
+	width: 75%;
+	height: 50px;
+	padding: 10px;
+	color: #ffffff;
+	margin: auto 15px;
+}
+
+.input::placeholder {
+	color: #d2d2d2;
+}
+
+.btn {
+	width: 50px;
+	height: 50px;
+	background: #fed36a;
+	border: none;
+	cursor: pointer;
+	color: #212832;
+	font-weight: bold;
+	font-size: larger;
+	margin: auto 5px;
+}
+
+.btnDelete {
+	background: #fed36a;
+	padding: 10px;
+	border: none;
+	cursor: pointer;
+	color: #212832;
+	font-weight: bold;
+	font-size: larger;
+	margin: auto 5px;
+}
+
+.loader {
+	font-size: 10px;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	position: absolute;
+	top: 40%;
+	left: 48%;
+	text-indent: -9999em;
+	animation: mulShdSpin 1.1s infinite ease;
+	transform: translateZ(0);
+}
+@keyframes mulShdSpin {
+	0%, 100% {
+		box-shadow: 0em -2.6em 0em 0em #fed36a, 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2), 2.5em 0em 0 0em rgba(254, 211, 106, 0.2), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.2), 0em 2.5em 0 0em rgba(254, 211, 106, 0.2), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.2), -2.6em 0em 0 0em rgba(254, 211, 106, 0.5), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.7);
+	}
+	12.5% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.7), 1.8em -1.8em 0 0em #fed36a, 2.5em 0em 0 0em rgba(254, 211, 106, 0.2), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.2), 0em 2.5em 0 0em rgba(254, 211, 106, 0.2), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.2), -2.6em 0em 0 0em rgba(254, 211, 106, 0.2), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.5);
+	}
+	25% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.5), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.7), 2.5em 0em 0 0em #fed36a, 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.2), 0em 2.5em 0 0em rgba(254, 211, 106, 0.2), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.2), -2.6em 0em 0 0em rgba(254, 211, 106, 0.2), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2);
+	}
+	37.5% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.2), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.5), 2.5em 0em 0 0em rgba(254, 211, 106, 0.7), 1.75em 1.75em 0 0em #fed36a, 0em 2.5em 0 0em rgba(254, 211, 106, 0.2), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.2), -2.6em 0em 0 0em rgba(254, 211, 106, 0.2), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2);
+	}
+	50% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.2), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2), 2.5em 0em 0 0em rgba(254, 211, 106, 0.5), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.7), 0em 2.5em 0 0em #fed36a, -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.2), -2.6em 0em 0 0em rgba(254, 211, 106, 0.2), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2);
+	}
+	62.5% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.2), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2), 2.5em 0em 0 0em rgba(254, 211, 106, 0.2), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.5), 0em 2.5em 0 0em rgba(254, 211, 106, 0.7), -1.8em 1.8em 0 0em #fed36a, -2.6em 0em 0 0em rgba(254, 211, 106, 0.2), -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2);
+	}
+	75% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.2), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2), 2.5em 0em 0 0em rgba(254, 211, 106, 0.2), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.2), 0em 2.5em 0 0em rgba(254, 211, 106, 0.5), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.7), -2.6em 0em 0 0em #fed36a, -1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2);
+	}
+	87.5% {
+		box-shadow: 0em -2.6em 0em 0em rgba(254, 211, 106, 0.2), 1.8em -1.8em 0 0em rgba(254, 211, 106, 0.2), 2.5em 0em 0 0em rgba(254, 211, 106, 0.2), 1.75em 1.75em 0 0em rgba(254, 211, 106, 0.2), 0em 2.5em 0 0em rgba(254, 211, 106, 0.2), -1.8em 1.8em 0 0em rgba(254, 211, 106, 0.5), -2.6em 0em 0 0em rgba(254, 211, 106, 0.7), -1.8em -1.8em 0 0em #fed36a;
+	}
+}
