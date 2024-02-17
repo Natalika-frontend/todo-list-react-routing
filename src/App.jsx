@@ -6,6 +6,7 @@ import { faArrowDownAZ, faMagnifyingGlass, faPenToSquare } from '@fortawesome/fr
 function App() {
 	const [taskText, setTaskText] = useState('');
 	const [filteredTodos, setFilteredTodos] = useState([]);
+	const [sortedTodos, setSortedTodos] = useState([]);
 	const [todos, setTodos] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isCreating, setIsCreating] = useState(false);
@@ -13,6 +14,8 @@ function App() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editingTaskId, setEditingTaskId] = useState(null);
 	const [isSearching, setIsSearching] = useState(false);
+	const [isSorting, setIsSorting] = useState(false);
+	const [error, setError] = useState('');
 
 	useEffect(() => {
 		fetchTodos();
@@ -43,12 +46,22 @@ function App() {
 	const requestAddTask = (taskText) => {
 		setIsCreating(true);
 		setIsSearching(false);
+
+		const isDuplicateTask = todos.some(todo =>
+			todo.title.toLowerCase() === taskText.trim().toLowerCase()
+		);
+
+		if (isDuplicateTask) {
+			setError('Задача уже существует');
+			setIsCreating(false);
+			return;
+		}
+
 		fetch('http://localhost:3015/todos', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json; charset=utf-8'},
 			body: JSON.stringify({
 				title: taskText,
-				complete: false,
 			}),
 		})
 			.then((rawResponse) => rawResponse.json())
@@ -114,8 +127,17 @@ function App() {
 
 	const handleSearchButtonClick = () => {
 		setIsSearching(true);
-		const filtered = todos.filter(todo => todo.title.toLowerCase().includes(taskText.toLowerCase()));
+		const filtered = todos.filter(todo => todo.title.toLowerCase().includes(taskText.toLowerCase().trim()));
 		setFilteredTodos(filtered);
+		setError('');
+	};
+
+	const handleSortButtonClick = () => {
+		setIsSorting(true);
+		const sortedTodos = [...todos].sort((a, b) => a.title.localeCompare(b.title));
+		setFilteredTodos(sortedTodos);
+		setSortedTodos(sortedTodos);
+		setError('');
 	};
 
 	return (
@@ -124,10 +146,11 @@ function App() {
 				<div className={styles.header}>
 					<h1>Список задач</h1>
 				</div>
+				{error && <div className={styles.error}>Такая задача уже есть</div>}
 				<ul className={styles.taskList}>
 					{isLoading
 						? <div className={styles.loader}></div>
-						: (isSearching ? filteredTodos : todos).map(({id, title}) => (
+						: (isSorting || isSearching ? filteredTodos : todos).map(({id, title}) => (
 							<li key={id} className={styles.task}>
 								<p>{title}</p>
 								<button className={styles.btn} onClick={() => handleEditTask(id, title)}>
@@ -146,17 +169,19 @@ function App() {
 						onChange={({target}) => {
 							setTaskText(target.value);
 							setIsSearching(false);
+							setIsSorting(false);
+							setError('');
 						}}
 						placeholder="Введите задачу"
 						className={styles.input}
 					/>
-					<button className={styles.btn} onClick={handleSearchButtonClick}><FontAwesomeIcon
-						icon={faMagnifyingGlass}/></button>
-					<button className={styles.btn} onClick={handleSearchButtonClick}><FontAwesomeIcon
-						icon={faArrowDownAZ}/></button>
 					<button className={styles.btn} disabled={isCreating || taskText.trim() === ''}
 							onClick={handleAddButtonClick}>{isEditing ?
 						<FontAwesomeIcon icon={faPenToSquare}/> : '+'}</button>
+					<button className={styles.btn} onClick={handleSearchButtonClick}><FontAwesomeIcon
+						icon={faMagnifyingGlass}/></button>
+					<button className={styles.btn} onClick={handleSortButtonClick}><FontAwesomeIcon
+						icon={faArrowDownAZ}/></button>
 				</div>
 			</div>
 		</div>
