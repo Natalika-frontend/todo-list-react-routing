@@ -10,7 +10,7 @@
 	margin-top: 50px;
 	display: flex;
 	flex-direction: column;
-	width: 500px;
+	width: 600px;
 	min-height: 700px;
 	background: #1e1e1e;
 	color: #ffffff;
@@ -30,12 +30,13 @@
 .taskList {
 	width: 100%;
 	margin-bottom: 100px;
+	margin-left: -40px;
 }
 
 .task {
 	margin: 10px auto;
 	width: 90%;
-	height: 100px;
+	min-height: 100px;
 	background: #263238;
 	display: flex;
 	justify-content: space-between;
@@ -45,6 +46,10 @@
 	border-left: 10px solid #fed36a;
 }
 
+.task p {
+	width: 250px;
+}
+
 .footer {
 	display: flex;
 	background: #263238;
@@ -52,12 +57,13 @@
 	height: 100px;
 	position: absolute;
 	bottom: 0;
+	margin: auto;
 }
 
 .input {
 	background: #455a64;
 	border: none;
-	width: 75%;
+	width: 70%;
 	height: 50px;
 	padding: 10px;
 	color: #ffffff;
@@ -69,7 +75,7 @@
 }
 
 .btn {
-	width: 50px;
+	min-width: 50px;
 	height: 50px;
 	background: #fed36a;
 	border: none;
@@ -77,18 +83,19 @@
 	color: #212832;
 	font-weight: bold;
 	font-size: larger;
-	margin: auto 5px;
+	padding: 10px 15px;
+	margin: auto 15px;
 }
 
-.btnDelete {
-	background: #fed36a;
-	padding: 10px;
-	border: none;
-	cursor: pointer;
-	color: #212832;
-	font-weight: bold;
-	font-size: larger;
-	margin: auto 5px;
+.btn:hover {
+	background-color: #f6b205;
+}
+
+.btn:disabled {
+	background-color: #b5b5b5;
+	cursor: not-allowed;
+	color: #8a8a8a;
+	opacity: 0.5;
 }
 
 .loader {
