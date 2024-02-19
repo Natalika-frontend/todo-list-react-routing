@@ -1,34 +1,24 @@
 import styles from './App.module.css';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import _ from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownAZ, faMagnifyingGlass, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { useRequestAddTask, useRequestDeleteTask, useRequestUpdateTask } from './hooks';
 
 function App() {
+
 	const [taskText, setTaskText] = useState('');
 	const [filteredTodos, setFilteredTodos] = useState([]);
 	const [sortedTodos, setSortedTodos] = useState([]);
 	const [todos, setTodos] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [isCreating, setIsCreating] = useState(false);
-	const [isDeleting, setIsDeleting] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
-	const [editingTaskId, setEditingTaskId] = useState(null);
+
 	const [isSearching, setIsSearching] = useState(false);
 	const [isSorting, setIsSorting] = useState(false);
-	const [error, setError] = useState('');
 
 	useEffect(() => {
 		fetchTodos();
 	}, []);
-
-	useEffect(() => {
-		if (taskText.trim() === '') {
-			setFilteredTodos(todos);
-		} else {
-			const filtered = todos.filter(todo => todo.title.toLowerCase().includes(taskText.toLowerCase()));
-			setFilteredTodos(filtered);
-		}
-	}, [taskText, todos]);
 
 	const fetchTodos = () => {
 		setIsLoading(true);
@@ -43,50 +33,18 @@ function App() {
 			});
 	};
 
-	const requestAddTask = (taskText) => {
-		setIsCreating(true);
-		setIsSearching(false);
+	const { requestAddTask, isCreating, error: addTaskError } = useRequestAddTask(fetchTodos, todos, setTaskText, setIsSearching);
+	const { isDeleting, requestDeleteTask } = useRequestDeleteTask(fetchTodos);
+	const { isEditing, editingTaskId, requestUpdateTask, setIsEditing, setEditingTaskId } = useRequestUpdateTask( fetchTodos, todos, taskText, setTaskText);
 
-		const isDuplicateTask = todos.some(todo =>
-			todo.title.toLowerCase() === taskText.trim().toLowerCase()
-		);
-
-		if (isDuplicateTask) {
-			setError('Задача уже существует');
-			setIsCreating(false);
-			return;
+	useEffect(() => {
+		if (taskText.trim() === '') {
+			setFilteredTodos(todos);
+		} else {
+			const filtered = todos.filter(todo => todo.title.toLowerCase().includes(taskText.toLowerCase()));
+			setFilteredTodos(filtered);
 		}
-
-		fetch('http://localhost:3015/todos', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json; charset=utf-8'},
-			body: JSON.stringify({
-				title: taskText,
-			}),
-		})
-			.then((rawResponse) => rawResponse.json())
-			.then(() => {
-				fetchTodos();
-				setTaskText('');
-			})
-			.finally(() => {
-				setIsCreating(false);
-				setIsSearching(false);
-			});
-	};
-
-	const requestDeleteTask = (id) => {
-		setIsDeleting(true);
-
-		fetch(`http://localhost:3015/todos/${id}`, {
-			method: 'DELETE',
-		})
-			.then((rawResponse) => rawResponse.json())
-			.finally(() => {
-				fetchTodos();
-				setIsDeleting(false)
-			});
-	};
+	}, [taskText, todos]);
 
 	const handleEditTask = (id, title) => {
 		setIsEditing(true)
@@ -104,32 +62,16 @@ function App() {
 		}
 	};
 
-	const requestUpdateTask = (id) => {
-		const updatedTodo = todos.find(todo => todo.id === id);
-		if (updatedTodo) {
-			updatedTodo.title = taskText;
-			fetch(`http://localhost:3015/todos/${id}`, {
-				method: 'PUT',
-				headers: {'Content-Type': 'application/json; charset=utf-8'},
-				body: JSON.stringify(updatedTodo),
-			})
-				.then(() => {
-					fetchTodos();
-					setEditingTaskId(null);
-				})
-				.finally(() => {
-					setTaskText('');
-					setIsEditing(false);
-					setIsSearching(false);
-				});
-		}
-	};
+	const handleSearch = _.debounce((searchQuery) => {
+		setIsSearching(true);
+		const filtered = todos.filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase().trim()));
+		setFilteredTodos(filtered);
+	}, 1000);
 
 	const handleSearchButtonClick = () => {
-		setIsSearching(true);
-		const filtered = todos.filter(todo => todo.title.toLowerCase().includes(taskText.toLowerCase().trim()));
-		setFilteredTodos(filtered);
-		setError('');
+		handleSearch(taskText);
+		setIsSearching(false);
+		setTaskText('');
 	};
 
 	const handleSortButtonClick = () => {
@@ -137,7 +79,6 @@ function App() {
 		const sortedTodos = [...todos].sort((a, b) => a.title.localeCompare(b.title));
 		setFilteredTodos(sortedTodos);
 		setSortedTodos(sortedTodos);
-		setError('');
 	};
 
 	return (
@@ -146,7 +87,7 @@ function App() {
 				<div className={styles.header}>
 					<h1>Список задач</h1>
 				</div>
-				{error && <div className={styles.error}>Такая задача уже есть</div>}
+				{addTaskError && <div className={styles.error}>Такая задача уже есть</div>}
 				<ul className={styles.taskList}>
 					{isLoading
 						? <div className={styles.loader}></div>
@@ -168,9 +109,7 @@ function App() {
 						value={taskText}
 						onChange={({target}) => {
 							setTaskText(target.value);
-							setIsSearching(false);
 							setIsSorting(false);
-							setError('');
 						}}
 						placeholder="Введите задачу"
 						className={styles.input}
