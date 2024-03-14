@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useRequestAddTask = (fetchTodos, todos, setTaskText, setIsSearching) => {
+export const useRequestCreateTask = (fetchTodos, todos, setTaskText, setIsSearching) => {
 	const [isCreating, setIsCreating] = useState(false);
 	const [error, setError] = useState('');
 
@@ -34,5 +34,5 @@ export const useRequestAddTask = (fetchTodos, todos, setTaskText, setIsSearching
 				setTaskText('');
 			});
 	};
-	return { isCreating, error, requestAddTask };
+	return { isCreating, error, requestAddTask, setError };
 };

@@ -1,0 +1,17 @@
+.input {
+	background: #455a64;
+	border: none;
+	width: 92%;
+	height: 100px;
+	padding: 10px;
+	color: #ffffff;
+	margin: auto 15px;
+}
+
+.input::placeholder {
+	color: #d2d2d2;
+}
+
+input:focus {
+	outline: none;
+}

@@ -1,0 +1,26 @@
+.container {
+	margin-top: 50px;
+	display: flex;
+	flex-direction: column;
+	width: 600px;
+	height: 700px;
+	justify-content: space-around;
+	border: 10px solid #bf952d;
+	background: #1e1e1e;
+	color: #ffffff;
+	align-items: center;
+}
+
+.title {
+	color: #fed36a;
+	font-size: 120px;
+}
+
+.notFound {
+	font-size: 20px;
+}
+
+h3 {
+	border: 1px solid #fed36a;
+	padding: 10px;
+}

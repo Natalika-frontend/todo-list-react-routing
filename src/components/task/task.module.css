@@ -1,0 +1,19 @@
+.task {
+	margin: 10px auto;
+	width: 90%;
+	min-height: 100px;
+	background: #263238;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-left: 10px solid #fed36a;
+}
+
+.taskTitle {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 510px;
+}
