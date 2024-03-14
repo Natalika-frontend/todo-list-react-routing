@@ -11,7 +11,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<MainPage />}></Route>
 				<Route path="/task/:id" element={<TaskDetails />}></Route>
-				<Route path="/task" element={<TaskPage />}></Route>
+				<Route path="/task-delete" element={<TaskPage />}></Route>
 				<Route path="*" element={<Page404/>}></Route>
 			</Routes>
 		</div>

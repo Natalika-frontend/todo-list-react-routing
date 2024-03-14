@@ -12,7 +12,7 @@ export const useRequestDeleteTask = (fetchTodos) => {
 			.then((rawResponse) => rawResponse.json())
 			.then(() => {
 				setIsDeleted(true);
-				window.location.href = '/task';
+				window.location.href = '/task-delete';
 			})
 			.finally(() => {
 				fetchTodos();
