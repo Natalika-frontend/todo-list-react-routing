@@ -1,14 +1,12 @@
 import styles from "./main-page.module.css";
 import { Task } from "../../components/task/task";
-import { Outlet } from "react-router-dom";
 import { Search } from "../../components/searh/search";
 import { useEffect, useState } from "react";
 import { Header } from "../../components/header/header";
 import { Footer } from "../../components/footer/footer";
-import { useRequestCreateTask, useRequestReadTasks, useRequestUpdateTask } from "../../hooks";
+import { useRequestCreateTask, useRequestReadTasks } from "../../hooks";
 
-export const MainPage = () => {
-	const [taskText, setTaskText] = useState('');
+export const MainPage = ({taskText, setTaskText}) => {
 	const [searchPhrase, setSearchPhrase] = useState('');
 	const [filteredTodos, setFilteredTodos] = useState([]);
 	const [showSearch, setShowSearch] = useState(false);
@@ -17,7 +15,7 @@ export const MainPage = () => {
 	const [isSearch, setIsSearch] = useState(false);
 	const [isSorting, setIsSorting] = useState(false);
 
-	const { todos, isLoading, fetchTodos } = useRequestReadTasks();
+	const {todos, isLoading, fetchTodos} = useRequestReadTasks();
 
 	const {
 		requestAddTask,
@@ -26,22 +24,10 @@ export const MainPage = () => {
 		setError,
 	} = useRequestCreateTask(fetchTodos, todos, setTaskText, setIsSearching);
 
-	const {
-		isEditing,
-		editingTaskId,
-		requestUpdateTask,
-		setIsEditing
-	} = useRequestUpdateTask(fetchTodos, todos, taskText, setTaskText);
-
 	const handleAddButtonClick = () => {
 		if (taskText.trim() !== '') {
-			if (editingTaskId !== null) {
-				requestUpdateTask(editingTaskId);
-			} else {
-				requestAddTask(taskText);
-			}
+			requestAddTask(taskText);
 		}
-		setIsEditing(false);
 	};
 
 	const onChangeSorting = ({target}) => {
@@ -49,14 +35,12 @@ export const MainPage = () => {
 		const sortedTodos = [...todos].sort((a, b) => a.title.localeCompare(b.title));
 		setFilteredTodos(sortedTodos);
 		setError('');
-		setIsEditing(false);
 	};
 
 	const toggleSearch = () => {
 		setShowSearch(!showSearch);
 		setIsSearch(!isSearch);
 		setError('');
-		setIsEditing(false);
 	};
 
 	const handleSearch = (searchValue) => {
@@ -85,7 +69,6 @@ export const MainPage = () => {
 					)))
 				}
 			</ul>
-			<Outlet/>
 			{showSearch && (
 				<Search onSearch={handleSearch} setIsSearching={setIsSearching}/>
 			)}
@@ -93,7 +76,6 @@ export const MainPage = () => {
 					setTaskText={setTaskText}
 					isCreating={isCreating}
 					handleAddButtonClick={handleAddButtonClick}
-					isEditing={isEditing}
 					toggleSearch={toggleSearch}
 					isSorting={isSorting}
 					onChangeSorting={onChangeSorting}

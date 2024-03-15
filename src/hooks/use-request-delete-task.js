@@ -3,6 +3,8 @@ import { useState } from "react";
 export const useRequestDeleteTask = (fetchTodos) => {
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isDeleted, setIsDeleted] = useState(false);
+	const [redirectToTaskDelete, setRedirectToTaskDelete] = useState(false);
+
 	const requestDeleteTask = (id) => {
 		setIsDeleting(true);
 
@@ -12,7 +14,7 @@ export const useRequestDeleteTask = (fetchTodos) => {
 			.then((rawResponse) => rawResponse.json())
 			.then(() => {
 				setIsDeleted(true);
-				window.location.href = '/task-delete';
+				setRedirectToTaskDelete(true);
 			})
 			.finally(() => {
 				fetchTodos();
@@ -25,5 +27,6 @@ export const useRequestDeleteTask = (fetchTodos) => {
 		isDeleting,
 		isDeleted,
 		requestDeleteTask,
+		redirectToTaskDelete
 	};
 };

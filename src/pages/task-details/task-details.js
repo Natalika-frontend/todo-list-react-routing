@@ -4,16 +4,17 @@ import { Task } from "../../components/task/task";
 import { Button } from "../../components/button/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useRequestDeleteTask, useRequestReadTasks, useRequestUpdateTask } from "../../hooks";
 import { Header } from "../../components/header/header";
-import { useState } from "react";
 import { Page404 } from "../page-404/Page404";
 
-export const TaskDetails = () => {
-	const [taskText, setTaskText] = useState('');
+export const TaskDetails = ({taskText, setTaskText}) => {
+	let {id} = useParams();
+	id = parseInt(id);
 
-	const { todos, fetchTodos } = useRequestReadTasks();
+	const {todos, fetchTodos} = useRequestReadTasks();
+
 	const {
 		isEditing,
 		requestUpdateTask,
@@ -21,14 +22,12 @@ export const TaskDetails = () => {
 		setEditingTaskId
 	} = useRequestUpdateTask(fetchTodos, todos, taskText, setTaskText);
 
-	const { id } = useParams();
-
-	const { isDeleting, isDeleted, requestDeleteTask } = useRequestDeleteTask(fetchTodos);
-	const task = todos.find(task => task.id === parseInt(id));
+	const {isDeleting, isDeleted, requestDeleteTask, redirectToTaskDelete} = useRequestDeleteTask(fetchTodos);
+	const task = todos.find(task => task.id === id);
 	if (!task) {
-		return <Page404 />;
+		return <Page404/>;
 	}
-	const { title } = task;
+	const {title} = task;
 
 	const handleEditTask = (id, title) => {
 		setIsEditing(true);
@@ -37,18 +36,22 @@ export const TaskDetails = () => {
 	};
 
 	const handleSaveTask = () => {
+		setTaskText(taskText);
 		requestUpdateTask(id);
 		setIsEditing(false);
 	};
 
 	const handleCancelEdit = () => {
-		setTaskText(title);
 		setIsEditing(false);
 	};
 
 	const handleDeleteTask = () => {
 		requestDeleteTask(id);
 	};
+
+	if (redirectToTaskDelete) {
+		return <Navigate to="/task/task-delete"/>;
+	}
 
 	return (
 		<div className={styles.container}>
@@ -60,11 +63,11 @@ export const TaskDetails = () => {
 					<input className={taskDetailsStyles.input}
 						   type="text"
 						   value={taskText}
-						   onChange={({ target }) => {
+						   onChange={({target}) => {
 							   setTaskText(target.value);
 						   }}
 					/>
-					<Button onClick={handleSaveTask}><FontAwesomeIcon icon={faPenToSquare}/></Button>
+					<Button onClick={handleSaveTask}>Сохранить</Button>
 					<Button onClick={handleCancelEdit}>Отменить</Button>
 				</>
 			) : (

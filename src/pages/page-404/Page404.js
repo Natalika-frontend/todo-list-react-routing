@@ -1,5 +1,5 @@
 import styles from './page-404.module.css';
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 export const Page404 = () => {
 	return (
 		<div className={styles.container}>
